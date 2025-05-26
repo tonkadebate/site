@@ -43,6 +43,9 @@
 		]
 	},
 	"dependencies": {
+		"@internationalized/date": "^3.8.1",
+		"fns": "^1.0.0",
+		"js-yaml": "^4.1.0",
 		"lucide-svelte": "^0.511.0"
 	}
 }

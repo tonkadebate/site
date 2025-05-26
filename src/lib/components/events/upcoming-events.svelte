@@ -1,51 +1,46 @@
 <script lang="ts">
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
-	import { MapPinIcon, ClockIcon } from "lucide-svelte";
+    import { MapPinIcon, ClockIcon } from "lucide-svelte";
 
-	// Mock upcoming events data (would come from YAML in real app)
-	const upcomingEvents = [
-		{
-			title: "Regional Debate Championship",
-			date: "March 15, 2024",
-			time: "9:00 AM",
-			location: "Main Auditorium",
-		},
-		{
-			title: "Practice Session",
-			date: "March 20, 2024",
-			time: "3:30 PM",
-			location: "Room 204",
-		},
-		{
-			title: "State Finals Preparation",
-			date: "March 25, 2024",
-			time: "4:00 PM",
-			location: "Library Conference Room",
-		},
-	];
+    // Accept events as a prop using Svelte 5 syntax
+    let { events = [] }: { 
+        events: Array<{
+            title: string;
+            date: string;
+            time?: string;
+            location?: string;
+            type?: string;
+        }>
+    } = $props();
 </script>
 
-<section id="upcoming" class="space-y-4">
-	<h2 class="text-2xl font-bold">Upcoming Events</h2>
-	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-		{#each upcomingEvents as event}
-			<Card>
-				<CardHeader>
-					<CardTitle class="text-lg">{event.title}</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<div class="space-y-2 text-sm">
-						<div class="flex items-center gap-2">
-							<ClockIcon class="h-4 w-4" />
-							<span>{event.date} at {event.time}</span>
-						</div>
-						<div class="flex items-center gap-2">
-							<MapPinIcon class="h-4 w-4" />
-							<span>{event.location}</span>
-						</div>
-					</div>
-				</CardContent>
-			</Card>
-		{/each}
-	</div>
+<section id="upcoming" class="space-y-4 w-fit mx-auto">
+    <h2 class="text-2xl font-bold">Upcoming</h2>
+    {#if events && events.length}
+        <ul class="space-y-4">
+            {#each events.slice(0, 3) as event}
+                <li class="border-l-4 border-primary pl-4 py-2">
+                    <h3 class="font-semibold text-lg">{event.title}</h3>
+                    <div class="flex gap-4 mt-1 space-y-1 text-sm text-muted-foreground">
+                        {#if event.date || event.time}
+                            <div class="flex items-center gap-2">
+                                <ClockIcon class="h-4 w-4" />
+                                <span>
+                                    {event.date}
+                                    {#if event.time} at {event.time}{/if}
+                                </span>
+                            </div>
+                        {/if}
+                        {#if event.location}
+                            <div class="flex items-center gap-2 pb-1">
+                                <MapPinIcon class="h-4 w-4" />
+                                <span>{event.location}</span>
+                            </div>
+                        {/if}
+                    </div>
+                </li>
+            {/each}
+        </ul>
+    {:else}
+        <p class="text-muted-foreground text-center">No upcoming events.</p>
+    {/if}
 </section>
